@@ -10,7 +10,8 @@ class GlobalViewManager {
     companion object {
 
         fun addView(application: Application, view: View) {
-            application.registerActivityLifecycleCallbacks(object : ActivityLifeCycleAdapter() {
+            application.registerActivityLifecycleCallbacks(object :
+                BaseActivityLifeCycleCallbacks() {
                 override fun onActivityResumed(activity: Activity) {
                     if (isAttached(activity)) {
                         return
@@ -21,7 +22,8 @@ class GlobalViewManager {
         }
 
         fun addView(application: Application, layout: Int) {
-            application.registerActivityLifecycleCallbacks(object : ActivityLifeCycleAdapter() {
+            application.registerActivityLifecycleCallbacks(object :
+                BaseActivityLifeCycleCallbacks() {
                 override fun onActivityResumed(activity: Activity) {
                     if (isAttached(activity)) {
                         return
@@ -33,33 +35,18 @@ class GlobalViewManager {
             })
         }
 
-        fun addFilter(application: Application, layout: Int) {
-            application.registerActivityLifecycleCallbacks(object : ActivityLifeCycleAdapter() {
-                override fun onActivityResumed(activity: Activity) {
-                    if (isAttached(activity, R.id.fl_all)) {
-                        return
-                    }
-                    if (activity.javaClass.simpleName != "WeexActivity") {
-                        return
-                    }
-                    if (activity is WeexActivity) {
-                        if (activity.hasFilter) {
-                            addFilterToRoot(activity, layout)
-                        }
-                    }
-                }
-            })
-        }
 
         private fun isAddQaPage(simpleName: String?): Boolean {
             if (simpleName == null) {
                 return false
             }
-            return QaMapManager.contain(simpleName)
+            return true
+//            return QaMapManager.contain(simpleName)
         }
 
         private fun isAttached(activity: Activity): Boolean {
-            val contentLayout = activity.window.decorView.findViewById(android.R.id.content) as ViewGroup?
+            val contentLayout =
+                activity.window.decorView.findViewById(android.R.id.content) as ViewGroup?
             return if (contentLayout != null) {
                 contentLayout.findViewById<View>(R.id.iv_qa) != null
             } else {
@@ -68,7 +55,8 @@ class GlobalViewManager {
         }
 
         private fun isAttached(activity: Activity, id: Int): Boolean {
-            val contentLayout = activity.window.decorView.findViewById<ViewGroup>(R.id.decor_content_parent)?.parent
+            val contentLayout =
+                activity.window.decorView.findViewById<ViewGroup>(R.id.decor_content_parent)?.parent
             return if (contentLayout is ViewGroup) {
                 contentLayout.findViewById<View>(id) != null
             } else {
@@ -101,15 +89,16 @@ class GlobalViewManager {
         }
 
         private fun addFilterToRoot(activity: Activity, layout: Int) {
-            var content = activity.window.decorView.findViewById<ViewGroup>(R.id.decor_content_parent)?.parent
+            var content =
+                activity.window.decorView.findViewById<ViewGroup>(R.id.decor_content_parent)?.parent
             if (content is ViewGroup) {
                 val contentChild = content.getChildAt(0)
-                if (contentChild != null) {
-                    content.removeAllViews()
-                    val root = LayoutInflater.from(activity).inflate(layout, content, true)
-                    content = root.findViewById<ViewGroup>(R.id.fl_all)
-                    (content as ViewGroup).addView(contentChild)
-                }
+//                if (contentChild != null) {
+//                    content.removeAllViews()
+//                    val root = LayoutInflater.from(activity).inflate(layout, content, true)
+//                    content = root.findViewById<ViewGroup>(R.id.fl_all)
+//                    (content as ViewGroup).addView(contentChild)
+//                }
             }
         }
     }

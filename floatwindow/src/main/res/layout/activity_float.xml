@@ -9,13 +9,13 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"/>
 
-    <FloatImageView
+    <com.wings.floatwindow.FloatImageView
         android:layout_width="64dp"
         android:layout_height="64dp"
         android:layout_marginRight="20dp"
         android:layout_marginBottom="20dp"
         android:id="@+id/iv_qa"
         android:layout_gravity="bottom|right"
-        android:src="@drawable/icon_qa"/>
+        android:src="@drawable/ic_icon"/>
 
 </FrameLayout>
