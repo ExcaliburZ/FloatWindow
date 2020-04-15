@@ -25,6 +25,50 @@ object FloatWindow {
         addDefaultView(R.layout.activity_float, id);
     }
 
+    fun addCustom(layout: Int) {
+        application.registerActivityLifecycleCallbacks(object :
+            BaseActivityLifeCycleCallbacks() {
+            override fun onActivityResumed(activity: Activity) {
+                if (isAttached(activity, R.id.fl_default_content)) {
+                    return
+                }
+                if (needAddView(activity)) {
+                    addCustomViewToRoot(activity, layout);
+                }
+            }
+        })
+    }
+
+    fun addCustom(view: View) {
+        application.registerActivityLifecycleCallbacks(object :
+            BaseActivityLifeCycleCallbacks() {
+            override fun onActivityResumed(activity: Activity) {
+                if (isAttached(activity, R.id.fl_default_content)) {
+                    return
+                }
+                if (needAddView(activity)) {
+                    addCustomViewToRoot(activity, view);
+                }
+            }
+        })
+    }
+
+    private fun addCustomViewToRoot(activity: Activity, view: View) {
+        var content = activity.window.decorView.findViewById<ViewGroup>(android.R.id.content)
+        val contentChild = content.getChildAt(0)
+        if (contentChild != null) {
+            content.removeAllViews()
+            val root = LayoutInflater.from(activity).inflate(R.layout.layout_custom, content, true)
+            val container = root.findViewById<ViewGroup>(R.id.fl_custom_container)
+            if (view.parent != null) {
+                (view.parent as ViewGroup).removeView(view)
+            }
+            container.addView(view)
+            content = root.findViewById(R.id.content)
+            content.addView(contentChild)
+        }
+    }
+
     fun addView(view: View) {
         application.registerActivityLifecycleCallbacks(object :
             BaseActivityLifeCycleCallbacks() {
@@ -37,22 +81,7 @@ object FloatWindow {
         })
     }
 
-    fun addView(layout: Int) {
-        application.registerActivityLifecycleCallbacks(object :
-            BaseActivityLifeCycleCallbacks() {
-            override fun onActivityResumed(activity: Activity) {
-                //TODO
-                if (isAttached(activity, R.id.fl_default_content)) {
-                    return
-                }
-                if (needAddView(activity)) {
-//                    addViewToRoot(activity, layout)
-                }
-            }
-        })
-    }
-
-    fun addDefaultView(layout: Int, src: Int) {
+    private fun addDefaultView(layout: Int, src: Int) {
         application.registerActivityLifecycleCallbacks(object :
             BaseActivityLifeCycleCallbacks() {
             override fun onActivityResumed(activity: Activity) {
@@ -87,16 +116,6 @@ object FloatWindow {
         return activity.findViewById<View>(id) != null
     }
 
-//    private fun isAttached(activity: Activity, id: Int): Boolean {
-//        val contentLayout =
-//            activity.window.decorView.findViewById<ViewGroup>(R.id.decor_content_parent)?.parent
-//        return if (contentLayout is ViewGroup) {
-//            contentLayout.findViewById<View>(id) != null
-//        } else {
-//            false
-//        }
-//    }
-
     private fun addViewToRoot(activity: Activity, view: View) {
         var content = activity.window.decorView.findViewById<ViewGroup>(android.R.id.content)
         val contentChild = content.getChildAt(0)
@@ -127,17 +146,20 @@ object FloatWindow {
         }
     }
 
-    private fun addFilterToRoot(activity: Activity, layout: Int) {
-        var content =
-            activity.window.decorView.findViewById<ViewGroup>(R.id.decor_content_parent)?.parent
-        if (content is ViewGroup) {
-            val contentChild = content.getChildAt(0)
-//                if (contentChild != null) {
-//                    content.removeAllViews()
-//                    val root = LayoutInflater.from(activity).inflate(layout, content, true)
-//                    content = root.findViewById<ViewGroup>(R.id.fl_all)
-//                    (content as ViewGroup).addView(contentChild)
-//                }
+    private fun addCustomViewToRoot(
+        activity: Activity,
+        layout: Int
+    ) {
+        var content = activity.window.decorView.findViewById<ViewGroup>(android.R.id.content)
+        val contentChild = content.getChildAt(0)
+        if (contentChild != null) {
+            content.removeAllViews()
+            val root = LayoutInflater.from(activity).inflate(R.layout.layout_custom, content, true)
+            val container = root.findViewById<ViewGroup>(R.id.fl_custom_container)
+            val inflate = LayoutInflater.from(activity).inflate(layout, container, false)
+            container.addView(inflate)
+            content = root.findViewById(R.id.content)
+            content.addView(contentChild)
         }
     }
 
