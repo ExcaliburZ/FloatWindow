@@ -3,33 +3,24 @@ package com.wings.floatwindow
 import android.content.Context
 import android.util.AttributeSet
 import android.view.MotionEvent
-import android.widget.ImageView
 import kotlin.math.absoluteValue
 
 /**
  * 悬浮的ImageView,支持拖拽,和自动贴边
  */
-class FloatImageView : ImageView {
+class FloatImageView : androidx.appcompat.widget.AppCompatImageView {
     constructor(context: Context) : this(context, null)
 
     constructor(context: Context, attrs: AttributeSet?) : this(context, attrs, 0)
 
     constructor(context: Context, attrs: AttributeSet?, defStyle: Int) : super(context, attrs, defStyle) {
-        setOnClickListener {
-            if (isMoving) {
-                return@setOnClickListener
-            }
-
-        }
     }
 
     private var dX: Float = 0.toFloat()
     private var dY: Float = 0.toFloat()
     private var upX: Float = 0.toFloat()
     private var upY: Float = 0.toFloat()
-    private val mSlideLeftMargin: Int = 40
-    public var key = ""
-    public var title = ""
+    private val mSlideLeftMargin: Int = ScreenUtils.dp2px(context,30);
 
     private var isMoving: Boolean = false
 

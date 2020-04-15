@@ -36,6 +36,11 @@ class ScreenUtils {
             windowManager.defaultDisplay.getMetrics(dm) // 给白纸设置宽高
             return dm.heightPixels
         }
+
+        fun dp2px(context: Context,dp: Int): Int {
+            val density = context.resources.displayMetrics.density
+            return (dp * density + 0.5).toInt()
+        }
     }
 
 
