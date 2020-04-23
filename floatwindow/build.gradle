@@ -1,6 +1,7 @@
 apply plugin: 'com.android.library'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
+apply plugin: 'com.novoda.bintray-release'
 
 android {
     compileSdkVersion 28
@@ -21,6 +22,14 @@ android {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
+    }
+    publish {
+        userOrg = 'excalibur'
+        groupId = 'tk.excaliburz'
+        artifactId = 'floatwindow'
+        publishVersion = '1.0.0'
+        desc = 'A float view in all app page.'
+        website = 'https://github.com/ExcaliburZ/FloatWindow'
     }
 
 }
